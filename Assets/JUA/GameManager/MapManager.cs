@@ -41,6 +41,8 @@ public class MapManager : MonoBehaviour
         SetButton(playerUI.transform.Find("Down").gameObject, () => Move(Dir.down));
         SetButton(playerUI.transform.Find("Right").gameObject, () => Move(Dir.right));
         SetButton(playerUI.transform.Find("Left").gameObject, () => Move(Dir.left));
+        SetButton(GameObject.Find("ShowMapButton"), MapButton);
+        
 
         player = playerObject.GetComponent<Player>();
         isMove = false;
@@ -67,7 +69,7 @@ public class MapManager : MonoBehaviour
 
     public void MapUpdate()
     {
-        
+
     }
 
     public void MapReloading()
@@ -83,9 +85,9 @@ public class MapManager : MonoBehaviour
     void setPos(Point p)
     {
         playerPos = p;
-        Vector2 pos = new Vector2(260 + (1600 * p.x / 8), 500 -
+        Vector2 pos = new Vector2(110 + (1600 * p.x / 8), -60 -
              (500 * p.y / 5));
-        playerUI.GetComponent<RectTransform>().transform.position = pos;
+        playerUI.GetComponent<RectTransform>().anchoredPosition = pos;
     }
 
     void Move(Dir dir)
@@ -113,9 +115,16 @@ public class MapManager : MonoBehaviour
                 p.x += 1;
                 break;
         }
-        setPos(p);
-        MoveUI(MapBoard.gameObject, new Vector2(0, -400), 3f);
 
+        setPos(p);
+        if (Board[p.x, p.y].getBlock().enemy != null)
+        {
+            StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -500), 2f, 1));
+        }
+        else
+        {
+            isMove = false;
+        }
 
     }
 
@@ -125,18 +134,38 @@ public class MapManager : MonoBehaviour
         BT.onClick.AddListener(act);
     }
 
-    IEnumerator MoveUI(GameObject ob, Vector2 vec, float maxcool)
+    Coroutine coroutine;
+    void MapButton()
     {
-        float cool = 0;
-        while(cool >= maxcool)
+        if (MapBoard.gameObject.activeSelf)
+            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.1f));
+        else
+            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
+    }
+
+    IEnumerator MoveUI(GameObject ob, Vector2 vec, float maxcool, float waittime, bool nowactive = true)
+    {
+        yield return new WaitForSeconds(waittime);
+        ob.SetActive(true);
+        float dis = Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec);
+
+        coroutine = null;
+        while (Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec) > 5)
         {
+            if (coroutine != null) yield break;
             ob.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(ob.GetComponent<RectTransform>().anchoredPosition,
                 vec, Time.deltaTime * maxcool);
-            cool += Time.deltaTime;
+            if (nowactive) ob.GetComponent<CanvasGroup>().alpha = Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec) / dis;
+            else ob.GetComponent<CanvasGroup>().alpha = (dis - Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec)) / dis;
             yield return new WaitForFixedUpdate();
         }
-        ob.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(ob.GetComponent<RectTransform>().anchoredPosition,
-                vec, Time.deltaTime * maxcool);
+        ob.GetComponent<RectTransform>().anchoredPosition = vec;
+        if (nowactive)
+        {
+            ob.GetComponent<CanvasGroup>().alpha = 0;
+            ob.SetActive(false);
+        }
+        else ob.GetComponent<CanvasGroup>().alpha = 1;
     }
 }
 
@@ -162,8 +191,8 @@ public class Node
 
     void setBlockPos()
     {
-        Vector2 pos = new Vector2(260 + (1600 * index.x / 8), 500 - 
+        Vector2 pos = new Vector2(110 + (1600 * index.x / 8), -60 - 
              (500 * index.y / 5));
-        ob.GetComponent<RectTransform>().transform.position = pos;
+        ob.GetComponent<RectTransform>().anchoredPosition = pos;
     }
 }

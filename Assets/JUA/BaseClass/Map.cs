@@ -27,5 +27,4 @@ public class Block
 {
     public GameObject enemy;
     public string name;
-    public int count;
 }
