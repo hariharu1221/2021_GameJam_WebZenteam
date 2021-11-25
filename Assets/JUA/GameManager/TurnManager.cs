@@ -4,14 +4,30 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool myTurn;
+    private Player player;
+
+    public void Set()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void reSet()
+    {
+        
+    }
+
+    public void StartBattle(Enemy enmey, Player player)
+    {
+        //if ()
+    }
+
+    void EndBattle()
+    {
+
+    }
+
+    public void update()
     {
         
     }

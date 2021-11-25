@@ -4,15 +4,32 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    static public GameManager instance;
+    public TurnManager turnManager;
+    public MapManager mapManager;
+
+    private void Awake()
     {
-        
+        if (instance = null) instance = this;
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        if (turnManager == null) turnManager = gameObject.GetComponent<TurnManager>();
+        if (mapManager == null) mapManager = gameObject.GetComponent<MapManager>();
+
+        SetManager();
+    }
+
+    void SetManager()
+    {
+        mapManager.Set();
+        turnManager.Set();
+    }
+
     void Update()
     {
-        
+        mapManager.MapUpdate();
+
     }
 }
