@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class MapManager : MonoBehaviour
 {
+    public static MapManager Instance;
+
     public GameObject blockPrefab;
     public RectTransform MapBoard;
 
@@ -24,6 +26,7 @@ public class MapManager : MonoBehaviour
     public int width;
 
     bool isMove = false;
+    bool active = false;
 
     enum Dir
     {
@@ -33,20 +36,31 @@ public class MapManager : MonoBehaviour
         left
     }
 
-    public void Set()
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(this);
+
+        Set();
+    }
+
+    void Start()
     {
         InitialzieBoard();
 
+        player = playerObject.GetComponent<Player>();
+        isMove = false;
+        setPos(new Point(0, 0));
+        active = MapBoard.gameObject.activeSelf;
+    }
+
+    public void Set()
+    {
         SetButton(playerUI.transform.Find("Up").gameObject, () => Move(Dir.up));
         SetButton(playerUI.transform.Find("Down").gameObject, () => Move(Dir.down));
         SetButton(playerUI.transform.Find("Right").gameObject, () => Move(Dir.right));
         SetButton(playerUI.transform.Find("Left").gameObject, () => Move(Dir.left));
         SetButton(GameObject.Find("ShowMapButton"), MapButton);
-        
-
-        player = playerObject.GetComponent<Player>();
-        isMove = false;
-        setPos(new Point(0,0));
     }
 
     void InitialzieBoard()
@@ -67,7 +81,7 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public void MapUpdate()
+    private void Update()
     {
 
     }
@@ -75,11 +89,6 @@ public class MapManager : MonoBehaviour
     public void MapReloading()
     {
 
-    }
-
-    public void ViewMap()
-    {
-        
     }
 
     void setPos(Point p)
@@ -96,7 +105,7 @@ public class MapManager : MonoBehaviour
         isMove = true;
 
         Point p = playerPos;
-        switch(dir)
+        switch (dir)
         {
             case Dir.up:
                 if (p.y == 0) return;
@@ -134,25 +143,31 @@ public class MapManager : MonoBehaviour
         BT.onClick.AddListener(act);
     }
 
-    Coroutine coroutine;
+    IEnumerator coroutine;
     void MapButton()
     {
-        if (MapBoard.gameObject.activeSelf)
-            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.1f));
+        if (coroutine != null)
+            StopCoroutine(coroutine);
+
+        if (active)
+            coroutine = (MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.1f));
         else
-            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
+            coroutine = (MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
+
+        StartCoroutine(coroutine);
     }
 
     IEnumerator MoveUI(GameObject ob, Vector2 vec, float maxcool, float waittime, bool nowactive = true)
     {
+        active = !active;
         yield return new WaitForSeconds(waittime);
         ob.SetActive(true);
         float dis = Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec);
 
-        coroutine = null;
+        //coroutine = null;
         while (Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec) > 5)
         {
-            if (coroutine != null) yield break;
+            //if (coroutine != null) yield break;
             ob.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(ob.GetComponent<RectTransform>().anchoredPosition,
                 vec, Time.deltaTime * maxcool);
             if (nowactive) ob.GetComponent<CanvasGroup>().alpha = Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec) / dis;
@@ -191,7 +206,7 @@ public class Node
 
     void setBlockPos()
     {
-        Vector2 pos = new Vector2(110 + (1600 * index.x / 8), -60 - 
+        Vector2 pos = new Vector2(110 + (1600 * index.x / 8), -60 -
              (500 * index.y / 5));
         ob.GetComponent<RectTransform>().anchoredPosition = pos;
     }

@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
+    public static TurnManager Instance;
+
     public bool myTurn;
     private Player player;
 
-    public void Set()
+    private void Awake()
+    {
+        if (Instance = null) Instance = this;
+        else Destroy(this);
+    }
+
+    void Start()
     {
         
     }
@@ -27,7 +35,7 @@ public class TurnManager : MonoBehaviour
 
     }
 
-    public void update()
+    void Update()
     {
         
     }
