@@ -10,13 +10,12 @@ public class Unit
 [System.Serializable]
 public class Status
 {
-    [SerializeField]
-    int maxhp;
-    int hp;
-    int speed;
-    int attack;
-    int defense;
-    int action;
+    [SerializeField] int maxhp;
+    [SerializeField] int hp;
+    [SerializeField] int speed;
+    [SerializeField] int attack;
+    [SerializeField] int defense;
+    //[SerializeField] int action;
 
     public int MaxHp
     {
@@ -71,17 +70,6 @@ public class Status
         get
         {
             return defense;
-        }
-    }
-    public int Action
-    {
-        set
-        {
-            action = value;
-        }
-        get
-        {
-            return action;
         }
     }
 }

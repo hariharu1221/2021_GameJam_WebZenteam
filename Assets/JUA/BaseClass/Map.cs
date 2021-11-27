@@ -26,5 +26,5 @@ public class BlockLine
 public class Block
 {
     public GameObject enemy;
-    public string name;
+    public bool isBattle = false;
 }

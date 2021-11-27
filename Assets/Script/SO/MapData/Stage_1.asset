@@ -15,126 +15,86 @@ MonoBehaviour:
   arrayBlocks:
   - LineBlocks:
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
+    - enemy: {fileID: 2134290496411103874, guid: 6bee236de8b98b945ad9c82cca31297a, type: 3}
+      isBattle: 1
+    - enemy: {fileID: 2134290496411103874, guid: 6bee236de8b98b945ad9c82cca31297a, type: 3}
+      isBattle: 1
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
-    - enemy: {fileID: 0}
-      name: 
-      count: 0
-    - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
   - LineBlocks:
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
   - LineBlocks:
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
   - LineBlocks:
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
   - LineBlocks:
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0
     - enemy: {fileID: 0}
-      name: 
-      count: 0
+      isBattle: 0

@@ -48,6 +48,11 @@ public class MapManager : MonoBehaviour
     {
         InitialzieBoard();
 
+        Reset();
+    }
+
+    private void Reset()
+    {
         player = playerObject.GetComponent<Player>();
         isMove = false;
         setPos(new Point(0, 0));
@@ -67,7 +72,7 @@ public class MapManager : MonoBehaviour
     {
         width = 8;
         height = mapData.ArrayBlocks.Length;
-        Board = new Node[height, width];
+        Board = new Node[width, height];
 
         Debug.Log(height);
 
@@ -76,7 +81,7 @@ public class MapManager : MonoBehaviour
             for (int j = 0; j < width; j++)
             {
                 GameObject n = Instantiate(blockPrefab, MapBoard);
-                Board[i, j] = new Node(mapData.ArrayBlocks[i].LineBlocks[j], new Point(j, i), n);
+                Board[j, i] = new Node(mapData.ArrayBlocks[i].LineBlocks[j], new Point(j, i), n);
             }
         }
     }
@@ -108,33 +113,57 @@ public class MapManager : MonoBehaviour
         switch (dir)
         {
             case Dir.up:
-                if (p.y == 0) return;
+                if (p.y == 0) { isMove = false; return; }
                 p.y -= 1;
                 break;
             case Dir.down:
-                if (p.y == height - 1) return;
+                if (p.y == height - 1) { isMove = false; return; }
                 p.y += 1;
                 break;
             case Dir.left:
-                if (p.x == 0) return;
+                if (p.x == 0) { isMove = false; return; }
                 p.x -= 1;
                 break;
             case Dir.right:
-                if (p.x == width - 1) return;
+                if (p.x == width - 1) { isMove = false; return; }
                 p.x += 1;
                 break;
         }
 
         setPos(p);
-        if (Board[p.x, p.y].getBlock().enemy != null)
+
+        if (Board[p.x, p.y].getBlock().isBattle == true)
         {
-            StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -500), 2f, 1));
+            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -500), 2f, 1));
+            Enemy enemy = Board[p.x, p.y].getBlock().enemy.GetComponent<Enemy>();
+
+            Invoke("PlayerUIOff", 2f);
+            StartCoroutine(Delay(3f, () => TurnManager.Instance.StartBattle(enemy, player)));
         }
         else
         {
             isMove = false;
         }
+    }
 
+    void PlayerUIOff()
+    {
+        for (int i = 0; i < playerUI.transform.childCount; i++)
+            playerUI.transform.GetChild(i).gameObject.SetActive(false);
+    }
+
+    public void EndBattle()
+    {
+        for (int i = 0; i < playerUI.transform.childCount; i++)
+            playerUI.transform.GetChild(i).gameObject.SetActive(true);
+        coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
+        isMove = false;
+    }
+
+    IEnumerator Delay(float time, UnityEngine.Events.UnityAction act)
+    {
+        yield return new WaitForSeconds(time);
+        act();
     }
 
     void SetButton(GameObject ob, UnityEngine.Events.UnityAction act)
@@ -143,18 +172,16 @@ public class MapManager : MonoBehaviour
         BT.onClick.AddListener(act);
     }
 
-    IEnumerator coroutine;
+    Coroutine coroutine;
     void MapButton()
     {
         if (coroutine != null)
             StopCoroutine(coroutine);
 
         if (active)
-            coroutine = (MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.1f));
+            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.1f));
         else
-            coroutine = (MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
-
-        StartCoroutine(coroutine);
+            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
     }
 
     IEnumerator MoveUI(GameObject ob, Vector2 vec, float maxcool, float waittime, bool nowactive = true)

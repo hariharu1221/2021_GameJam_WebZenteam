@@ -5,7 +5,6 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
-    void Awake() => Instance = this;
 
     [SerializeField] CardData cardData;
     [SerializeField] GameObject cardPrefab;
@@ -14,8 +13,12 @@ public class CardManager : MonoBehaviour
     [SerializeField] Transform cardSpawnPoint;
     [SerializeField] Transform myCardRight;
     [SerializeField] Transform myCardLeft;
+    [SerializeField] GameObject cards;
+    [SerializeField] List<SpriteRenderer> sp = new List<SpriteRenderer>();
 
     List<Card> CardBuffer;
+
+    void Awake() => Instance = this;
 
     void SetupCardBuffer()
     {
@@ -51,16 +54,25 @@ public class CardManager : MonoBehaviour
         return card;
     }
 
-    void AddCard(bool isMine)
+    public void ResetCard()
+    {
+        myCards.Clear();
+        otherCards.Clear();
+
+    }
+
+    public void AddCard(bool isMine)
     {
         var cardObject = Instantiate(cardPrefab, cardSpawnPoint.position, Utils.QI);
         cardObject.transform.localScale = Vector3.one * 0.7f;
+        cardObject.transform.SetParent(cards.transform);
+        sp.Add(cardObject.GetComponent<SpriteRenderer>());
         var card = cardObject.GetComponent<InCard>();
         card.Setup(PopCard(), isMine);
         (isMine ? myCards : otherCards).Add(card);
 
         SetOriginOrder(isMine);
-        if (isMine) CardAlignment(isMine, Vector3.one * 1.0f);
+        if (isMine) CardAlignment(isMine, Vector3.one * 0.6f);
     }
 
     void SetOriginOrder(bool isMine)
@@ -112,9 +124,12 @@ public class CardManager : MonoBehaviour
             var targetRot = Quaternion.identity;
             if (objCount >= 4)
             {
+                if (i == 0 || i == objCount - 1) targetPos.y -= 0.2f;
                 float curve = Mathf.Sqrt(Mathf.Pow(height, 10) + Mathf.Pow(objLerps[i] - 0.5f, 10));
                 curve = height >= 0 ? curve : -curve;
                 targetPos.y += curve;
+                //curve = Mathf.Abs(((objCount / 2) - i - 1) / (objCount / 2)) * 0.3f;
+                //targetPos.y -= curve;
                 targetRot = Quaternion.Slerp(leftTr.rotation, rightTr.rotation, objLerps[i]);
             }
             results.Add(new PRS(targetPos, targetRot, scale));
