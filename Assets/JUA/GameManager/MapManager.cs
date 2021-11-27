@@ -10,23 +10,18 @@ public class MapManager : MonoBehaviour
     public GameObject blockPrefab;
     public RectTransform MapBoard;
 
-    [SerializeField]
-    private Map mapData;
-    [SerializeField]
-    private GameObject playerObject;
+    [SerializeField] private Map mapData;
+    [SerializeField] private GameObject playerObject;
     private Player player;
     private Point playerPos;
-    [SerializeField]
-    private GameObject playerUI;
+    [SerializeField] private GameObject playerUI;
 
     Node[,] Board;
-    [HideInInspector]
-    public int height;
-    [HideInInspector]
-    public int width;
+    [HideInInspector] public int height;
+    [HideInInspector] public int width;
 
+    [HideInInspector] public bool active = false;
     bool isMove = false;
-    bool active = false;
 
     enum Dir
     {
@@ -138,7 +133,7 @@ public class MapManager : MonoBehaviour
             Enemy enemy = Board[p.x, p.y].getBlock().enemy.GetComponent<Enemy>();
 
             Invoke("PlayerUIOff", 2f);
-            StartCoroutine(Delay(3f, () => TurnManager.Instance.StartBattle(enemy, player)));
+            StartCoroutine(Delay(2f, () => TurnManager.Instance.StartBattle(enemy, player)));
         }
         else
         {

@@ -17,6 +17,8 @@ public class InCard : MonoBehaviour
     public Card card;
     bool isFront;
     public PRS originPRS;
+    public bool isMyCard;
+    public bool isSetCard = false;
 
     public void Setup(Card card, bool isFront)
     {
@@ -32,11 +34,34 @@ public class InCard : MonoBehaviour
         }
         else
         {
-            cardSprite.sprite = cardBack;
-            nameT.text = "";
-            attack.text = "";
-            health.text = "";
+            sprite.sprite = this.card.sprite;
+            nameT.text = this.card.name;
+            attack.text = this.card.attack.ToString();
+            health.text = this.card.health.ToString();
+            this.gameObject.GetComponent<SpriteRenderer>().color = new Color(86f / 255, 63f / 255, 204f / 255, 1);
         }
+    }
+
+    private void OnMouseOver()
+    {
+        CardManager.Instance.CardMouseOver(this);
+    }
+
+    private void OnMouseExit()
+    {
+        CardManager.Instance.CardMouseExit(this);
+    }
+
+    private void OnMouseDown()
+    {
+        if (!isMyCard) return;
+        CardManager.Instance.CardMouseDown(this);
+    }
+
+    private void OnMouseUp()
+    {
+        if (!isMyCard) return;
+        CardManager.Instance.CardMouseUp(this);
     }
 
     public void MoveTransform(PRS prs, bool useDotween, float dotweenTime = 0)

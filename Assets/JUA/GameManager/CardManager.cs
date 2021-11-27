@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
+using Random = UnityEngine.Random;
 
 public class CardManager : MonoBehaviour
 {
@@ -16,9 +19,19 @@ public class CardManager : MonoBehaviour
     [SerializeField] GameObject cards;
     [SerializeField] List<SpriteRenderer> sp = new List<SpriteRenderer>();
 
+    [SerializeField]InCard[] BoardCardArray = new InCard[5];
     List<Card> CardBuffer;
+    InCard selectCard;
+    bool isMyCardDrag;
+    bool onMyCardArea;
+    enum ECardState { Nothing, CanMouseOver, CanMouseDrag }
+    ECardState eCardState;
 
-    void Awake() => Instance = this;
+    void Awake()
+    {
+        Instance = this;
+
+    }
 
     void SetupCardBuffer()
     {
@@ -69,10 +82,22 @@ public class CardManager : MonoBehaviour
         sp.Add(cardObject.GetComponent<SpriteRenderer>());
         var card = cardObject.GetComponent<InCard>();
         card.Setup(PopCard(), isMine);
+        card.isMyCard = isMine ? true : false;
+        if (!isMine) card.originPRS = new PRS(Vector3.zero, Quaternion.identity, Vector3.one * 0.6f);
         (isMine ? myCards : otherCards).Add(card);
+
 
         SetOriginOrder(isMine);
         if (isMine) CardAlignment(isMine, Vector3.one * 0.6f);
+    }
+
+    public void RightCard()
+    {
+        if (myCards.Count == 0) return;
+        myCards.Insert(0, myCards[myCards.Count - 1]);
+        myCards.RemoveAt(myCards.Count - 1);
+        SetOriginOrder(true);
+        CardAlignment(true, Vector3.one * 0.6f);
     }
 
     void SetOriginOrder(bool isMine)
@@ -81,7 +106,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             var targetCard = isMine ? myCards[i] : otherCards[i];
-            targetCard?.GetComponent<Order>().SetOriginOrder(i);
+            targetCard?.GetComponent<Order>().SetOriginOrder(i + 5);
         }
     }
 
@@ -143,5 +168,148 @@ public class CardManager : MonoBehaviour
             AddCard(true);
         if (Input.GetKeyDown(KeyCode.Alpha2))
             AddCard(false);
+
+        if (isMyCardDrag)
+        {
+            CardDrag(selectCard);
+        }
+
+        DetectCardArea();
+        SetEcardState();
     }
+
+    void CardDrag(InCard card)
+    {
+        if (!onMyCardArea)
+        {
+            selectCard.MoveTransform(new PRS(Utils.MousePos, Utils.QI, selectCard.originPRS.scale), false);
+        }
+    }
+
+    void DetectCardArea()
+    {
+        RaycastHit2D[] hits = Physics2D.RaycastAll(Utils.MousePos, Vector3.forward);
+        int layer = LayerMask.NameToLayer("MyCardArea");
+        onMyCardArea = Array.Exists(hits, x => x.collider.gameObject.layer == layer);
+    }
+
+    #region CARD
+
+    public void CardMouseOver(InCard card)
+    {
+        if (eCardState == ECardState.Nothing) return;
+
+        EnlargeCard(true, card);
+    }
+
+    public void CardMouseExit(InCard card)
+    {
+        EnlargeCard(false, card);
+    }
+
+    public void CardMouseDown(InCard card)
+    {
+        selectCard = card;
+        if (eCardState != ECardState.CanMouseDrag) return;
+        isMyCardDrag = true;
+    }
+
+    public void CardMouseUp(InCard card)
+    {
+        isMyCardDrag = false;
+        if (eCardState != ECardState.CanMouseDrag) return;
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(Utils.MousePos, Vector3.forward);
+        int layer = LayerMask.NameToLayer("GameBoardArea");
+        if (Array.Exists(hits, x => x.collider.gameObject.layer == layer)) //카드 레이어에 카드를 놓았을 때
+        {
+            RaycastHit2D hit = Array.Find(hits, x=>x.collider.gameObject.layer == layer);
+            GameObject ob = hit.collider.gameObject;
+
+            int i = int.TryParse(ob.name, out i) ? i : -1;
+            if (BoardCardArray[i] != null)
+                if (!BoardCardArray[i].isMyCard) //아래 카드가 적 카드인 경우 카드 아웃 후 리턴
+                {
+                    return;
+                }
+            for (int k = 0; k < 5; k++)
+            {
+                if (BoardCardArray[k] == card) CardOutBoard(selectCard , false); //선택된 카드가 이미 그 자리에 있는 경우 카드 아웃
+            }
+            if (BoardCardArray[i] != null && BoardCardArray[i] != card) CardOutBoard(BoardCardArray[i], false); // 자리가 비어있지 않고 선택된 카드가 아닌 경우 그 자리에 있었던 카드 아웃
+            CardOnBoard(ob, selectCard);
+        }
+        else
+        {
+            if (selectCard.isSetCard == true) CardOutBoard(selectCard); //세팅되어 있는 카드일 경우 카드 아웃
+        }
+    }
+
+    public void CardOnBoard(GameObject Board, InCard card, bool mycard = true)
+    {
+        card.isSetCard = true;
+        if (mycard) myCards.Remove(card);
+        //else otherCards.Remove(card);
+
+        int i = int.TryParse(Board.name, out i) ? i : -1;
+        BoardCardArray[i] = card;
+        card.MoveTransform(new PRS(new Vector3(Board.transform.position.x, Board.transform.position.y, 0)
+            , Utils.QI, card.originPRS.scale), true);
+        card.GetComponent<Order>().SetOriginOrder(3);
+        CardAlignment(true, Vector3.one * 0.6f);
+    }
+
+    public void CardOutBoard(InCard card, bool move = true, bool mycard = true)
+    {
+        if (!mycard)
+        {
+            Destroy(card.gameObject);
+        }
+
+        card.isSetCard = false;
+        myCards.Add(card);
+        int i = Array.IndexOf(BoardCardArray, card);
+        if (i >= 0) BoardCardArray[i] = null;
+        if (move == true)
+        {
+            SetOriginOrder(true);
+            CardAlignment(true, Vector3.one * 0.6f);
+        }
+    }
+
+    void EnlargeCard(bool isEnlarge, InCard card)
+    {
+        if (card.isSetCard) return;
+        if (isEnlarge)
+        {
+            Vector3 enlargePos = new Vector3(card.originPRS.pos.x, -3.15f, -10f);
+            card.MoveTransform(new PRS(enlargePos, Utils.QI, Vector3.one * 0.8f), false);
+        }
+        else
+            card.MoveTransform(card.originPRS, false);
+
+        card.GetComponent<Order>().SetMostFrontOrder(isEnlarge);
+    }
+
+    void SetEcardState()
+    {
+        if (!TurnManager.Instance.isBattle)
+            eCardState = ECardState.Nothing;
+
+        else if (MapManager.Instance.active)
+            eCardState = ECardState.Nothing;
+
+        else if (TurnManager.Instance.isTurnLoad)
+            eCardState = ECardState.Nothing;
+
+        else
+            eCardState = ECardState.CanMouseDrag;
+    }
+
+    public InCard ReturnOtherCard(int index)
+    {
+        return otherCards[index];
+    }
+
+    #endregion
 }
