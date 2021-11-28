@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Sprites charater;
+    public Sprites sprites;
     public Status status;
 }

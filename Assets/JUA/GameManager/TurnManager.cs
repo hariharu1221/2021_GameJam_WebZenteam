@@ -107,7 +107,7 @@ public class TurnManager : MonoBehaviour
         }
     }
 
-    void TurnEnd()
+    public void TurnEnd()
     {
         if (isTurnLoad) return;
         isTurnLoad = true;
@@ -115,6 +115,8 @@ public class TurnManager : MonoBehaviour
         //보드카드 리스트 지우기
         if (enemy.status.Hp <= 0) EndBattle(Team.enemy);
         else if (player.status.Hp <= 0) EndBattle(Team.player);
+
+        StartCoroutine(SkillManager.Instance.PlayerDaggerAttack());
     }
 
     void Update()

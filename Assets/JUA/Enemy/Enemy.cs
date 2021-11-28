@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Sprites charater;
+    public Sprites sprites;
     public Status status;
 }
 
@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
 public class Sprites
 {
     public Sprite idle;
-    public Sprite hit;
-    public Sprite attack;
+    public Sprite damaged;
+    public Sprite gunAttack;
+    public Sprite swordAttack;
 }

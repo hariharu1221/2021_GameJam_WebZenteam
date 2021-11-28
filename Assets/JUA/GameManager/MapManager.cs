@@ -12,6 +12,8 @@ public class MapManager : MonoBehaviour
 
     [SerializeField] private Map mapData;
     [SerializeField] private GameObject playerObject;
+    [SerializeField] private GameObject enemyTransform;
+    private GameObject enemyObject;
     private Player player;
     private Point playerPos;
     [SerializeField] private GameObject playerUI;
@@ -130,14 +132,64 @@ public class MapManager : MonoBehaviour
         if (Board[p.x, p.y].getBlock().isBattle == true)
         {
             coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -500), 2f, 1));
-            Enemy enemy = Board[p.x, p.y].getBlock().enemy.GetComponent<Enemy>();
+
+            enemyObject = GameObject.Instantiate(Board[p.x, p.y].getBlock().enemy, enemyTransform.transform);
+            StartCoroutine(FadeOutObject(enemyObject.GetComponentsInChildren<SpriteRenderer>(), 1.0f, 2f));
+            Enemy enemy = enemyObject.GetComponent<Enemy>();
 
             Invoke("PlayerUIOff", 2f);
+            SkillManager.Instance.SetEntity(enemy, player);
             StartCoroutine(Delay(2f, () => TurnManager.Instance.StartBattle(enemy, player)));
         }
         else
         {
             isMove = false;
+        }
+    }
+
+    IEnumerator FadeOutObject(SpriteRenderer sr, float time, float delay = 0f)
+    {
+        Color color = sr.color;
+        color.a = 0;
+        sr.color = color;
+        yield return new WaitForSeconds(delay);
+        float cool = 0f;
+        while (time > cool)
+        {
+            color.a = cool / time;
+            sr.color = color;
+            cool += Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        sr.color = Color.white;
+    }
+
+    IEnumerator FadeOutObject(SpriteRenderer[] sr, float time, float delay = 0f)
+    {
+        foreach(SpriteRenderer sr2 in sr)
+        {
+            Color color= sr2.color;
+            color.a = 0;
+            sr2.color = color;
+        }
+        yield return new WaitForSeconds(delay);
+        float cool = 0f;
+        while (time > cool)
+        {
+            foreach(SpriteRenderer sr3 in sr)
+            {
+                Color color = sr3.color;
+                color.a = cool / time;
+                sr3.color = color;
+            }
+            cool += Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        foreach (SpriteRenderer sr2 in sr)
+        {
+            Color color = sr2.color;
+            color.a = 1;
+            sr2.color = color;
         }
     }
 
