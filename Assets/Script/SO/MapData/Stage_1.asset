@@ -16,85 +16,125 @@ MonoBehaviour:
   - LineBlocks:
     - enemy: {fileID: 0}
       isBattle: 0
-    - enemy: {fileID: 2134290496411103874, guid: 6bee236de8b98b945ad9c82cca31297a, type: 3}
+      mapEvent: 0
+    - enemy: {fileID: 8675706072592133080, guid: b80af423ed898b8429223115de940bfe, type: 3}
       isBattle: 1
-    - enemy: {fileID: 2134290496411103874, guid: 6bee236de8b98b945ad9c82cca31297a, type: 3}
+      mapEvent: 0
+    - enemy: {fileID: 8675706072592133080, guid: b80af423ed898b8429223115de940bfe, type: 3}
       isBattle: 1
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
+      mapEvent: 0
+    - enemy: {fileID: 3793714044208860452, guid: 14f9b5fbf1c43ac46bbf2b5d8702c980, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 311943181749760922, guid: d76f9c8b94fbdc349b3cebc27a7e05b1, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 838362833226753252, guid: 221afd9fb9b39c640b172e43669b12ec, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 652116753162930603, guid: d8d737a7bf400414f871800be74f0231, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 2261325460727976360, guid: d9f4c1b0c99290f4883b59e038117533, type: 3}
+      isBattle: 1
+      mapEvent: 0
+  - LineBlocks:
+    - enemy: {fileID: 8675706072592133080, guid: b80af423ed898b8429223115de940bfe, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 3793714044208860452, guid: 14f9b5fbf1c43ac46bbf2b5d8702c980, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 3793714044208860452, guid: 14f9b5fbf1c43ac46bbf2b5d8702c980, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 311943181749760922, guid: d76f9c8b94fbdc349b3cebc27a7e05b1, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 838362833226753252, guid: 221afd9fb9b39c640b172e43669b12ec, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 652116753162930603, guid: d8d737a7bf400414f871800be74f0231, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 2261325460727976360, guid: d9f4c1b0c99290f4883b59e038117533, type: 3}
+      isBattle: 1
+      mapEvent: 0
+    - enemy: {fileID: 8652676999569076094, guid: 6f3dbc023c695f9458140bcaaba48fbb, type: 3}
+      isBattle: 1
+      mapEvent: 0
   - LineBlocks:
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
   - LineBlocks:
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
   - LineBlocks:
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
+      mapEvent: 0
     - enemy: {fileID: 0}
       isBattle: 0
-  - LineBlocks:
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
-    - enemy: {fileID: 0}
-      isBattle: 0
+      mapEvent: 0

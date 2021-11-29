@@ -7,10 +7,8 @@ using DG.Tweening;
 public class InCard : MonoBehaviour
 {
     [SerializeField] SpriteRenderer cardSprite;
-    [SerializeField] SpriteRenderer sprite;
     [SerializeField] TMP_Text nameT;
-    [SerializeField] TMP_Text attack;
-    [SerializeField] TMP_Text health;
+    [SerializeField] TMP_Text textT;
     [SerializeField] Sprite cardFront;
     [SerializeField] Sprite cardBack;
 
@@ -27,14 +25,16 @@ public class InCard : MonoBehaviour
 
         if (this.isFront)
         {
-            sprite.sprite = this.card.sprite;
+            this.gameObject.GetComponent<SpriteRenderer>().sprite = this.card.sprite;
             nameT.text = this.card.name;
+            textT.text = this.card.skillText;
         }
         else
         {
-            sprite.sprite = this.card.sprite;
+            this.gameObject.GetComponent<SpriteRenderer>().sprite = this.card.sprite;
             nameT.text = this.card.name;
             this.gameObject.GetComponent<SpriteRenderer>().color = new Color(86f / 255, 63f / 255, 204f / 255, 1);
+            textT.text = this.card.skillText;
         }
     }
 

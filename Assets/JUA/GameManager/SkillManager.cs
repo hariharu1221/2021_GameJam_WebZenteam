@@ -45,8 +45,9 @@ public class SkillManager : MonoBehaviour
         yield return new WaitForFixedUpdate();
     }
 
-    public IEnumerator PlayerDaggerAttack()
+    IEnumerator PlayerDaggerAttack(float percent)
     {
+        player.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 10;
         SetEntitySprite(player.gameObject, player.sprites.swordReady);
         PlusMoveDotWeen(player.gameObject, new Vector3(6.4f, 0, 0), 0.4f);
         yield return new WaitForSeconds(0.4f);
@@ -57,7 +58,7 @@ public class SkillManager : MonoBehaviour
 
         SetEntitySprite(enemy.gameObject, enemy.sprites.damaged);
         PlusMoveDotWeen(enemy.gameObject, new Vector3(1.3f, 0, 0), 0.2f);
-
+        enemy.status.Hp -= (int)(player.status.Attack * percent);
         //주변 효과
         yield return new WaitForSeconds(0.5f);
 
@@ -67,10 +68,16 @@ public class SkillManager : MonoBehaviour
         PlusMoveDotWeen(player.gameObject, new Vector3(-6.9f, 0, 0), 0.4f);
         SetEntitySprite(player.gameObject, player.sprites.idle);
         yield return new WaitForSeconds(0.5f);
+        player.gameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
     }
+
+    //IEnumerator PlayerSpearAttack
+
 
     public IEnumerator returnSkill(CardSkill skill, bool isMySkill)
     {
-        return PlayerDaggerAttack();
+        if (skill == CardSkill.BasicAttack)
+            return PlayerDaggerAttack(1f);
+        return PlayerDaggerAttack(1f);
     }
 }

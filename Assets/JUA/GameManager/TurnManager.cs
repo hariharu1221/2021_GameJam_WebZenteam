@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
@@ -20,6 +21,11 @@ public class TurnManager : MonoBehaviour
     private GameObject[] BoardCardArray;
     [SerializeField] GameObject TurnEndOb;
 
+    GameObject playerStatus;
+    GameObject enemyStatus;
+    public StatusText playerText;
+    public StatusText enemyText;
+
     public enum Team
     {
         player,
@@ -33,11 +39,13 @@ public class TurnManager : MonoBehaviour
 
         TurnEndOb = GameObject.Find("TurnEnd");
         TurnEndOb.GetComponent<Button>().onClick.AddListener(() => TurnEnd());
+        playerStatus = GameObject.Find("player_indicator");
+        enemyStatus = GameObject.Find("enemy_indicator");
     }
 
     void Start()
     {
-        for (int i = 0; i < 5; i++) StartCoroutine(DropCard(i * 0.2f));
+        for (int i = 0; i < 5; i++) StartCoroutine(DropCard(1f + i * 0.2f));
     }
 
     void reSet()
@@ -75,6 +83,12 @@ public class TurnManager : MonoBehaviour
         MapManager.Instance.EndBattle();
     }
 
+    public void IfEndBattle()
+    {
+        if (enemy.status.Hp <= 0) EndBattle(Team.enemy);
+        else if (player.status.Hp <= 0) EndBattle(Team.player);
+    }
+
     public void TurnStart()
     {
         isTurnLoad = false;
@@ -101,7 +115,6 @@ public class TurnManager : MonoBehaviour
                 }
                 if (!isSame) break;
             }
-            Debug.Log(AddRandom[i]);
             CardManager.Instance.AddCard(false);
             CardManager.Instance.CardOnBoard(GameBoard.transform.GetChild(AddRandom[i]).gameObject, CardManager.Instance.ReturnOtherCard(i), false);
         }
@@ -109,6 +122,7 @@ public class TurnManager : MonoBehaviour
 
     public void TurnEnd()
     {
+        //if (!isBattle) return;
         if (isTurnLoad) return;
         isTurnLoad = true;
 
@@ -126,8 +140,23 @@ public class TurnManager : MonoBehaviour
 
     void Update()
     {
-
+        if (player != null) 
+        {
+            playerText.hpTM.text = player.status.Hp.ToString() + " / " + player.status.MaxHp.ToString();
+            playerText.attackTM.text = player.status.Attack.ToString();
+            playerText.defenseTM.text = player.status.Defense.ToString();
+            playerText.speedTM.text = player.status.Speed.ToString();
+        }
+        if (enemy != null)
+        {
+            enemyText.hpTM.text = enemy.status.Hp.ToString() + " / " + enemy.status.MaxHp.ToString();
+            enemyText.attackTM.text = enemy.status.Attack.ToString();
+            enemyText.defenseTM.text = enemy.status.Defense.ToString();
+            enemyText.speedTM.text = enemy.status.Speed.ToString();
+        }
     }
+
+
 
     void OnUI()
     {
@@ -138,4 +167,14 @@ public class TurnManager : MonoBehaviour
     {
 
     }
+}
+
+
+[System.Serializable]
+public class StatusText
+{
+    public TextMeshPro hpTM;
+    public TextMeshPro speedTM;
+    public TextMeshPro attackTM;
+    public TextMeshPro defenseTM;
 }

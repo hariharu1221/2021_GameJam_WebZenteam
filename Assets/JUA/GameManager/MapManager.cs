@@ -76,8 +76,6 @@ public class MapManager : MonoBehaviour
         height = mapData.ArrayBlocks.Length;
         Board = new Node[width, height];
 
-        Debug.Log(height);
-
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -137,6 +135,7 @@ public class MapManager : MonoBehaviour
         setPos(p);
         if (Board[p.x, p.y].getBlock().isBattle == true)
         {
+            StopCoroutine(coroutine);
             StartCoroutine(UIManager.Instance.FadeInObject(Fade.GetComponent<SpriteRenderer>(), 0.5f, 0f));
             coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, -500), 3f, 0.3f));
             active = !active;
@@ -161,6 +160,8 @@ public class MapManager : MonoBehaviour
         StartCoroutine(UIManager.Instance.FadeOutObject(Fade.GetComponent<SpriteRenderer>(), 0.5f, 0f));
         coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
         active = !active;
+        StartCoroutine(UIManager.Instance.FadeInObject(enemyObject.GetComponentsInChildren<SpriteRenderer>(), 1.0f, 0f));
+
         isMove = false;
     }
 
@@ -186,6 +187,7 @@ public class MapManager : MonoBehaviour
         {
             StartCoroutine(UIManager.Instance.FadeInObject(Fade.GetComponent<SpriteRenderer>(), 0.5f, 0f));
             coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.3f));
+            
         }
         else
         {

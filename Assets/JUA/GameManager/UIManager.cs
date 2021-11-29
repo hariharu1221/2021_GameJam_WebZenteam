@@ -35,7 +35,7 @@ public class UIManager : MonoBehaviour
         rect.localScale = Vector3.one * 0.8f;
         canvas.alpha = 1;
         cool = 0;
-        yield return new WaitForFixedUpdate();
+        yield return new WaitForSeconds(0.1f);
         while (0.4f > cool)
         {
             vec = Vector3.one * (0.8f + (cool / 1.5f));
@@ -123,6 +123,35 @@ public class UIManager : MonoBehaviour
         }
         color.a = 1;
         sr.color = color;
+    }
+
+    public IEnumerator FadeInObject(SpriteRenderer[] sr, float time, float delay = 0f)
+    {
+        foreach (SpriteRenderer sr2 in sr)
+        {
+            Color color = sr2.color;
+            color.a = 1;
+            sr2.color = color;
+        }
+        yield return new WaitForSeconds(delay);
+        float cool = 0f;
+        while (time > cool)
+        {
+            foreach (SpriteRenderer sr3 in sr)
+            {
+                Color color = sr3.color;
+                color.a = 1f - cool / time;
+                sr3.color = color;
+            }
+            cool += Time.deltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        foreach (SpriteRenderer sr2 in sr)
+        {
+            Color color = sr2.color;
+            color.a = 0;
+            sr2.color = color;
+        }
     }
 
     public IEnumerator FadeInObject(SpriteRenderer sr, float time, float delay = 0f)

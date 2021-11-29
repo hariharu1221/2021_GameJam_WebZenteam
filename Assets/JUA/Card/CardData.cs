@@ -22,14 +22,16 @@ public class CardData : ScriptableObject
 public enum CardSkill
 {
     BasicAttack,        //기본 공격
-    DoubleUp,           //두번 공격
+    DoubleAttack,           //두번 공격
     HeadShot,           //헤드샷-크리티컬
     LittleSacrifice,    //방어력 낮추고 hp회복
     TheCollector,       //상대의 hp가 10이하일 때 즉시 사살
-    Ignite,             //점화
-    BattleFury,         //공격력 증가
+    FireBullet,         //점화
+    BattlePosture,      //공격력 증가
     Bloodlust,          //공격 후 체력 회복
     BreakTheMold,       //상대 방여력 수치 감소
     LastStand,          //자신의 hp가 60% 이하일시 공격력 증가
+    VitalSpotLunge,
+    StealthAttack,
     Hemorrhage          //2턴 출혈
 }

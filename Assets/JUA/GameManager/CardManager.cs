@@ -11,15 +11,15 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] CardData cardData;
     [SerializeField] GameObject cardPrefab;
-    [SerializeField] List<InCard> myCards;
-    [SerializeField] List<InCard> otherCards;
+    List<InCard> myCards = new List<InCard>();
+    List<InCard> otherCards = new List<InCard>();
     [SerializeField] Transform cardSpawnPoint;
     [SerializeField] Transform myCardRight;
     [SerializeField] Transform myCardLeft;
     [SerializeField] GameObject cards;
-    [SerializeField] List<SpriteRenderer> sp = new List<SpriteRenderer>();
+    List<SpriteRenderer> sp = new List<SpriteRenderer>();
 
-    [SerializeField]InCard[] BoardCardArray = new InCard[5];
+    InCard[] BoardCardArray = new InCard[5];
     List<Card> CardBuffer;
     InCard selectCard;
     bool isMyCardDrag;
@@ -106,16 +106,19 @@ public class CardManager : MonoBehaviour
     {
         yield return StartCoroutine(UIManager.Instance.UIFade(0.5f, true));
         yield return new WaitForSeconds(0.3f);
+        bool isEndbattle = false;
         for (int i = 0; i < BoardCardArray.Length; i++)
         {
             if (BoardCardArray[i] == null) continue;
             yield return StartCoroutine(SkillManager.Instance.returnSkill(BoardCardArray[i].card.skill, BoardCardArray[i].isMyCard));
             yield return new WaitForSeconds(0.2f);
-            if (TurnManager.Instance.IsEndBattle()) break;
+            isEndbattle = TurnManager.Instance.IsEndBattle();
+            if (isEndbattle) break;
         }
         ClearBoardCardArray();
         ResetCard(2);
-        TurnManager.Instance.TurnStart();
+        if (isEndbattle) TurnManager.Instance.IfEndBattle();
+        else TurnManager.Instance.TurnStart();
         StartCoroutine(UIManager.Instance.UIFade(1f, false));
     }
 
@@ -299,7 +302,7 @@ public class CardManager : MonoBehaviour
         int i = int.TryParse(Board.name, out i) ? i : -1;
         BoardCardArray[i] = card;
         card.MoveTransform(new PRS(new Vector3(Board.transform.position.x, Board.transform.position.y, 0)
-            , Utils.QI, card.originPRS.scale), true);
+            , Utils.QI, card.originPRS.scale * 0.8f), true);
         card.GetComponent<Order>().SetOriginOrder(3);
         CardAlignment(true, Vector3.one * 0.6f);
     }
