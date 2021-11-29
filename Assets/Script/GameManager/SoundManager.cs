@@ -43,7 +43,6 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        DontDestroyOnLoad(this.gameObject); 
 
         bgmPlayer = GameObject.Find("BGMSoundPlayer").GetComponent<AudioSource>();
         sfxPlayer = GameObject.Find("SFXSoundPlayer").GetComponent<AudioSource>();

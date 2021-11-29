@@ -33,5 +33,9 @@ public enum CardSkill
     LastStand,          //자신의 hp가 60% 이하일시 공격력 증가
     VitalSpotLunge,
     StealthAttack,
-    Hemorrhage          //2턴 출혈
+    Hemorrhage,          //2턴 출혈
+    HealthUp,
+    StrengthUp,
+    DefenseUP,
+    SpeedUp,
 }

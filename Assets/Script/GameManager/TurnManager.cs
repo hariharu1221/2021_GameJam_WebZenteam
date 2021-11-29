@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -92,7 +93,7 @@ public class TurnManager : MonoBehaviour
         }
         else
         {
-
+            SceneManager.LoadScene("Title");
         }
     }
 

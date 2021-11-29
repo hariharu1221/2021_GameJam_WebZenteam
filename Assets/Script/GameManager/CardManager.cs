@@ -111,8 +111,9 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < BoardCardArray.Length; i++)
         {
             if (BoardCardArray[i] == null) continue;
-            yield return StartCoroutine(SkillManager.Instance.returnSkill(BoardCardArray[i].card.skill, BoardCardArray[i].isMyCard));
-            if (i != BoardCardArray.Length - 1)
+            yield return StartCoroutine(SkillManager.Instance.returnSkill(BoardCardArray[i].card.skill, 
+                BoardCardArray[i].isMyCard, BoardCardArray[i].card.skillParameter));
+            if (i != BoardCardArray.Length - 1 && BoardCardArray[i + 1] != null)
                 if (BoardCardArray[i + 1].isMyCard) CameraManager.Instance.SetPosWithSize(new Vector3(-2.6f, 2.6f, -100), 3, 0.4f);
                 else CameraManager.Instance.SetPosWithSize(new Vector3(2.6f, 2.6f, -100), 3, 0.4f);
             yield return new WaitForSeconds(0.4f);
