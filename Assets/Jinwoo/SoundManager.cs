@@ -74,11 +74,16 @@ public class SoundManager : MonoBehaviour
             bgmPlayer.clip = mainBgmAudioClip;
             bgmPlayer.Play();
         }
-        else if (SceneManager.GetActiveScene().name == "Adventure")
+        else if (SceneManager.GetActiveScene().name == "Ex")
         {
             bgmPlayer.clip = adventureBgmAudioClip;
             bgmPlayer.Play();
         }
+    }
+
+    private void Start()
+    {
+        PlayBGMSound(0.2f);
     }
 }
 
