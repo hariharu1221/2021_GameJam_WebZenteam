@@ -17,5 +17,6 @@ public class Sprites
     public Sprite damaged;
     public Sprite gunAttack;
     public Sprite swordAttack;
-    public Sprite move;
+    public Sprite gunReady;
+    public Sprite swordReady;
 }

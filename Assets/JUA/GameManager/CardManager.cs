@@ -95,18 +95,28 @@ public class CardManager : MonoBehaviour
     public void ClearBoardCardArray()
     {
         for (int i = 0; i < BoardCardArray.Length; i++)
+        {
+            if (BoardCardArray[i] == null) continue;
+            Destroy(BoardCardArray[i].gameObject);
             BoardCardArray[i] = null;
+        }
     }
 
     public IEnumerator PlayCard()
     {
+        yield return StartCoroutine(UIManager.Instance.UIFade(0.5f, true));
+        yield return new WaitForSeconds(0.3f);
         for (int i = 0; i < BoardCardArray.Length; i++)
         {
             if (BoardCardArray[i] == null) continue;
             yield return StartCoroutine(SkillManager.Instance.returnSkill(BoardCardArray[i].card.skill, BoardCardArray[i].isMyCard));
-            yield return new WaitForSeconds(1);
-
+            yield return new WaitForSeconds(0.2f);
+            if (TurnManager.Instance.IsEndBattle()) break;
         }
+        ClearBoardCardArray();
+        ResetCard(2);
+        TurnManager.Instance.TurnStart();
+        StartCoroutine(UIManager.Instance.UIFade(1f, false));
     }
 
     public void AddCard(bool isMine)
