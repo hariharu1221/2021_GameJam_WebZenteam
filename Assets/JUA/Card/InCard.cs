@@ -29,15 +29,11 @@ public class InCard : MonoBehaviour
         {
             sprite.sprite = this.card.sprite;
             nameT.text = this.card.name;
-            attack.text = this.card.attack.ToString();
-            health.text = this.card.health.ToString();
         }
         else
         {
             sprite.sprite = this.card.sprite;
             nameT.text = this.card.name;
-            attack.text = this.card.attack.ToString();
-            health.text = this.card.health.ToString();
             this.gameObject.GetComponent<SpriteRenderer>().color = new Color(86f / 255, 63f / 255, 204f / 255, 1);
         }
     }

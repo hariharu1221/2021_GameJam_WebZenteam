@@ -6,8 +6,6 @@ using UnityEngine;
 public class Card
 {
     public string name;
-    public int attack;
-    public int health;
     public Sprite sprite;
     public float percent;
     public string skillText;
