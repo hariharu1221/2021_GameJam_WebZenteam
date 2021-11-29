@@ -66,8 +66,8 @@ public class SkillManager : MonoBehaviour
         SetEntitySprite(player.gameObject, player.sprites.idle);
     }
 
-    public static void returnSkill(CardSkill skill, Enemy enemy, Player player, bool isMySkill)
+    public IEnumerator returnSkill(CardSkill skill, bool isMySkill)
     {
-
+        return PlayerDaggerAttack();
     }
 }

@@ -27,4 +27,12 @@ public class Block
 {
     public GameObject enemy;
     public bool isBattle = false;
+    public MapEvent mapEvent;
+}
+
+public enum MapEvent
+{
+    A,
+    B,
+    C
 }

@@ -29,8 +29,8 @@ public class CardManager : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
-
+        if (Instance == null) Instance = this;
+        else Destroy(Instance);
     }
 
     void SetupCardBuffer()
@@ -67,11 +67,46 @@ public class CardManager : MonoBehaviour
         return card;
     }
 
-    public void ResetCard()
+    public void ResetCard(int type)
     {
-        myCards.Clear();
-        otherCards.Clear();
+        if (type == 1)
+        {
+            for (int i = 0; i < myCards.Count; i++)
+                Destroy(myCards[i].gameObject);
+            myCards.Clear();
+        }
+        else if (type == 2)
+        {
+            for (int i = 0; i < otherCards.Count; i++)
+                Destroy(otherCards[i].gameObject);
+            otherCards.Clear();
+        }
+        else if (type == 3)
+        {
+            for (int i = 0; i < myCards.Count; i++)
+                Destroy(myCards[i].gameObject);
+            myCards.Clear();
+            for (int i = 0; i < otherCards.Count; i++)
+                Destroy(otherCards[i].gameObject);
+            otherCards.Clear();
+        }
+    }
 
+    public void ClearBoardCardArray()
+    {
+        for (int i = 0; i < BoardCardArray.Length; i++)
+            BoardCardArray[i] = null;
+    }
+
+    public IEnumerator PlayCard()
+    {
+        for (int i = 0; i < BoardCardArray.Length; i++)
+        {
+            if (BoardCardArray[i] == null) continue;
+            yield return StartCoroutine(SkillManager.Instance.returnSkill(BoardCardArray[i].card.skill, BoardCardArray[i].isMyCard));
+            yield return new WaitForSeconds(1);
+
+        }
     }
 
     public void AddCard(bool isMine)

@@ -111,17 +111,24 @@ public class TurnManager : MonoBehaviour
     {
         if (isTurnLoad) return;
         isTurnLoad = true;
-        //카드 스킬 실행
-        //보드카드 리스트 지우기
+
+        StartCoroutine(CardManager.Instance.PlayCard());
+
         if (enemy.status.Hp <= 0) EndBattle(Team.enemy);
         else if (player.status.Hp <= 0) EndBattle(Team.player);
 
         StartCoroutine(SkillManager.Instance.PlayerDaggerAttack());
     }
 
+    public bool IsEndBattle()
+    {
+        if (enemy.status.Hp <= 0 || player.status.Hp <= 0) return true;
+        else return false;
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) CardManager.Instance.ResetCard();
+
     }
 
     void OnUI()

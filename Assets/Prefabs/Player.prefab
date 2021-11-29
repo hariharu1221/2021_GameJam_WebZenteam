@@ -216,9 +216,10 @@ MonoBehaviour:
     damaged: {fileID: 21300000, guid: b3fda26ef10899e49931c13d24e8d15b, type: 3}
     gunAttack: {fileID: 21300000, guid: afb20ab28e9f6654591ec92c23bf20de, type: 3}
     swordAttack: {fileID: 0}
+    move: {fileID: 0}
   status:
     maxhp: 100
     hp: 100
     speed: 20
-    attack: 30
+    attack: 29
     defense: 10
