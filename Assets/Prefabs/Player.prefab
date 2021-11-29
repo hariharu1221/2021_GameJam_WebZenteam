@@ -215,8 +215,9 @@ MonoBehaviour:
     idle: {fileID: 21300000, guid: 0d37c6a3c9a2fd84fbe30dac5650c2f6, type: 3}
     damaged: {fileID: 21300000, guid: b3fda26ef10899e49931c13d24e8d15b, type: 3}
     gunAttack: {fileID: 21300000, guid: afb20ab28e9f6654591ec92c23bf20de, type: 3}
-    swordAttack: {fileID: 0}
-    move: {fileID: 0}
+    swordAttack: {fileID: 21300000, guid: 6bfa085204d406b4c92fd56169d31566, type: 3}
+    gunReady: {fileID: 21300000, guid: eb107af8a59279c48b7597ce837992f7, type: 3}
+    swordReady: {fileID: 21300000, guid: f9ded23241c700d468fb1254e627a7f3, type: 3}
   status:
     maxhp: 100
     hp: 100

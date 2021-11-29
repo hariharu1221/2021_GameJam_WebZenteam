@@ -47,23 +47,26 @@ public class SkillManager : MonoBehaviour
 
     public IEnumerator PlayerDaggerAttack()
     {
-        PlusMoveDotWeen(player.gameObject, new Vector3(6.4f, 0, 0), 0.7f);
-        yield return new WaitForSeconds(0.9f);
+        SetEntitySprite(player.gameObject, player.sprites.swordReady);
+        PlusMoveDotWeen(player.gameObject, new Vector3(6.4f, 0, 0), 0.4f);
+        yield return new WaitForSeconds(0.4f);
 
-        SetEntitySprite(player.gameObject, player.sprites.gunAttack);
-        PlusMoveDotWeen(player.gameObject, new Vector3(0.5f, 0, 0), 0.2f);
-        yield return new WaitForSeconds(0.25f);
+        SetEntitySprite(player.gameObject, player.sprites.swordAttack);
+        PlusMoveDotWeen(player.gameObject, new Vector3(0.5f, 0, 0), 0.1f);
+        yield return new WaitForSeconds(0.15f);
 
-        //주변 효과
         SetEntitySprite(enemy.gameObject, enemy.sprites.damaged);
         PlusMoveDotWeen(enemy.gameObject, new Vector3(1.3f, 0, 0), 0.2f);
+
+        //주변 효과
         yield return new WaitForSeconds(0.5f);
 
         SetEntitySprite(enemy.gameObject, enemy.sprites.idle);
         PlusMoveDotWeen(enemy.gameObject, new Vector3(-1.3f, 0, 0), 0.5f);
 
-        PlusMoveDotWeen(player.gameObject, new Vector3(-6.9f, 0, 0), 0.7f);
+        PlusMoveDotWeen(player.gameObject, new Vector3(-6.9f, 0, 0), 0.4f);
         SetEntitySprite(player.gameObject, player.sprites.idle);
+        yield return new WaitForSeconds(0.5f);
     }
 
     public IEnumerator returnSkill(CardSkill skill, bool isMySkill)

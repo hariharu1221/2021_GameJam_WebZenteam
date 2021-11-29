@@ -9,6 +9,10 @@ public class MapManager : MonoBehaviour
 
     public GameObject blockPrefab;
     public RectTransform MapBoard;
+    public GameObject Fade;
+
+    public Sprite past_location;
+    public Sprite player_location;
 
     [SerializeField] private Map mapData;
     [SerializeField] private GameObject playerObject;
@@ -58,11 +62,12 @@ public class MapManager : MonoBehaviour
 
     public void Set()
     {
-        SetButton(playerUI.transform.Find("Up").gameObject, () => Move(Dir.up));
-        SetButton(playerUI.transform.Find("Down").gameObject, () => Move(Dir.down));
-        SetButton(playerUI.transform.Find("Right").gameObject, () => Move(Dir.right));
-        SetButton(playerUI.transform.Find("Left").gameObject, () => Move(Dir.left));
+        //SetButton(GameObject.Find("Up"), () => Move(Dir.up));
+        //SetButton(GameObject.Find("Left"), () => Move(Dir.left));
+        SetButton(GameObject.Find("Down"), () => Move(Dir.down));
+        SetButton(GameObject.Find("Right"), () => Move(Dir.right));
         SetButton(GameObject.Find("ShowMapButton"), MapButton);
+        GameObject.Find("MapBoard").SetActive(false);
     }
 
     void InitialzieBoard()
@@ -78,11 +83,11 @@ public class MapManager : MonoBehaviour
             for (int j = 0; j < width; j++)
             {
                 GameObject n = Instantiate(blockPrefab, MapBoard);
+                n.name = "[" + j + ", " + i + "]";
                 Board[j, i] = new Node(mapData.ArrayBlocks[i].LineBlocks[j], new Point(j, i), n);
             }
         }
     }
-
     private void Update()
     {
 
@@ -96,9 +101,10 @@ public class MapManager : MonoBehaviour
     void setPos(Point p)
     {
         playerPos = p;
-        Vector2 pos = new Vector2(110 + (1600 * p.x / 8), -60 -
-             (500 * p.y / 5));
+        Vector2 pos = new Vector2(90.625f + (1050 * p.x / 8), -25 -
+             (350 * p.y / 5));
         playerUI.GetComponent<RectTransform>().anchoredPosition = pos;
+        Board[p.x, p.y].ob.GetComponent<Image>().sprite = player_location;
     }
 
     void Move(Dir dir)
@@ -107,6 +113,7 @@ public class MapManager : MonoBehaviour
         isMove = true;
 
         Point p = playerPos;
+        Board[p.x, p.y].ob.GetComponent<Image>().sprite = past_location;
         switch (dir)
         {
             case Dir.up:
@@ -128,18 +135,18 @@ public class MapManager : MonoBehaviour
         }
 
         setPos(p);
-
         if (Board[p.x, p.y].getBlock().isBattle == true)
         {
-            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -500), 2f, 1));
+            StartCoroutine(UIManager.Instance.FadeInObject(Fade.GetComponent<SpriteRenderer>(), 0.5f, 0f));
+            coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, -500), 3f, 0.3f));
+            active = !active;
 
             enemyObject = GameObject.Instantiate(Board[p.x, p.y].getBlock().enemy, enemyTransform.transform);
-            StartCoroutine(FadeOutObject(enemyObject.GetComponentsInChildren<SpriteRenderer>(), 1.0f, 2f));
+            StartCoroutine(UIManager.Instance.FadeOutObject(enemyObject.GetComponentsInChildren<SpriteRenderer>(), 1.0f, 2f));
             Enemy enemy = enemyObject.GetComponent<Enemy>();
 
-            Invoke("PlayerUIOff", 2f);
             SkillManager.Instance.SetEntity(enemy, player);
-            StartCoroutine(Delay(2f, () => TurnManager.Instance.StartBattle(enemy, player)));
+            StartCoroutine(Delay(0.5f, () => TurnManager.Instance.StartBattle(enemy, player)));
         }
         else
         {
@@ -147,63 +154,13 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    IEnumerator FadeOutObject(SpriteRenderer sr, float time, float delay = 0f)
-    {
-        Color color = sr.color;
-        color.a = 0;
-        sr.color = color;
-        yield return new WaitForSeconds(delay);
-        float cool = 0f;
-        while (time > cool)
-        {
-            color.a = cool / time;
-            sr.color = color;
-            cool += Time.deltaTime;
-            yield return new WaitForFixedUpdate();
-        }
-        sr.color = Color.white;
-    }
-
-    IEnumerator FadeOutObject(SpriteRenderer[] sr, float time, float delay = 0f)
-    {
-        foreach(SpriteRenderer sr2 in sr)
-        {
-            Color color= sr2.color;
-            color.a = 0;
-            sr2.color = color;
-        }
-        yield return new WaitForSeconds(delay);
-        float cool = 0f;
-        while (time > cool)
-        {
-            foreach(SpriteRenderer sr3 in sr)
-            {
-                Color color = sr3.color;
-                color.a = cool / time;
-                sr3.color = color;
-            }
-            cool += Time.deltaTime;
-            yield return new WaitForFixedUpdate();
-        }
-        foreach (SpriteRenderer sr2 in sr)
-        {
-            Color color = sr2.color;
-            color.a = 1;
-            sr2.color = color;
-        }
-    }
-
-    void PlayerUIOff()
-    {
-        for (int i = 0; i < playerUI.transform.childCount; i++)
-            playerUI.transform.GetChild(i).gameObject.SetActive(false);
-    }
-
     public void EndBattle()
     {
         for (int i = 0; i < playerUI.transform.childCount; i++)
             playerUI.transform.GetChild(i).gameObject.SetActive(true);
-        coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
+        StartCoroutine(UIManager.Instance.FadeOutObject(Fade.GetComponent<SpriteRenderer>(), 0.5f, 0f));
+        coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
+        active = !active;
         isMove = false;
     }
 
@@ -226,35 +183,17 @@ public class MapManager : MonoBehaviour
             StopCoroutine(coroutine);
 
         if (active)
-            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.1f));
+        {
+            StartCoroutine(UIManager.Instance.FadeInObject(Fade.GetComponent<SpriteRenderer>(), 0.5f, 0f));
+            coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.3f));
+        }
         else
-            coroutine = StartCoroutine(MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
-    }
+        {
+            StartCoroutine(UIManager.Instance.FadeOutObject(Fade.GetComponent<SpriteRenderer>(), 0.5f, 0f));
+            coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, 350), 3f, 0.1f, false));
+        }
 
-    IEnumerator MoveUI(GameObject ob, Vector2 vec, float maxcool, float waittime, bool nowactive = true)
-    {
         active = !active;
-        yield return new WaitForSeconds(waittime);
-        ob.SetActive(true);
-        float dis = Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec);
-
-        //coroutine = null;
-        while (Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec) > 5)
-        {
-            //if (coroutine != null) yield break;
-            ob.GetComponent<RectTransform>().anchoredPosition = Vector2.Lerp(ob.GetComponent<RectTransform>().anchoredPosition,
-                vec, Time.deltaTime * maxcool);
-            if (nowactive) ob.GetComponent<CanvasGroup>().alpha = Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec) / dis;
-            else ob.GetComponent<CanvasGroup>().alpha = (dis - Vector3.Distance(ob.GetComponent<RectTransform>().anchoredPosition, vec)) / dis;
-            yield return new WaitForFixedUpdate();
-        }
-        ob.GetComponent<RectTransform>().anchoredPosition = vec;
-        if (nowactive)
-        {
-            ob.GetComponent<CanvasGroup>().alpha = 0;
-            ob.SetActive(false);
-        }
-        else ob.GetComponent<CanvasGroup>().alpha = 1;
     }
 }
 
@@ -280,8 +219,8 @@ public class Node
 
     void setBlockPos()
     {
-        Vector2 pos = new Vector2(110 + (1600 * index.x / 8), -60 -
-             (500 * index.y / 5));
+        Vector2 pos = new Vector2(90.625f + (1050 * index.x / 8), -55 -
+             (350 * index.y / 5));
         ob.GetComponent<RectTransform>().anchoredPosition = pos;
     }
 }

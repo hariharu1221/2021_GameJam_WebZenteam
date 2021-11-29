@@ -37,7 +37,7 @@ public class TurnManager : MonoBehaviour
 
     void Start()
     {
-
+        for (int i = 0; i < 5; i++) StartCoroutine(DropCard(i * 0.2f));
     }
 
     void reSet()
@@ -47,13 +47,13 @@ public class TurnManager : MonoBehaviour
 
     public void StartBattle(Enemy enemy, Player player)
     {
+        StartCoroutine(UIManager.Instance.ShowBattleStart());
         isBattle = true;
         this.enemy = enemy;
         this.player = player;
 
         OnUI();
 
-        for (int i = 0; i < 5; i++) StartCoroutine(DropCard(i * 0.2f));
         TurnStart();
     }
 
@@ -75,7 +75,7 @@ public class TurnManager : MonoBehaviour
         MapManager.Instance.EndBattle();
     }
 
-    void TurnStart()
+    public void TurnStart()
     {
         isTurnLoad = false;
         for (int i = 0; i < 2; i++) StartCoroutine(DropCard(i * 0.2f));
@@ -116,8 +116,6 @@ public class TurnManager : MonoBehaviour
 
         if (enemy.status.Hp <= 0) EndBattle(Team.enemy);
         else if (player.status.Hp <= 0) EndBattle(Team.player);
-
-        StartCoroutine(SkillManager.Instance.PlayerDaggerAttack());
     }
 
     public bool IsEndBattle()
