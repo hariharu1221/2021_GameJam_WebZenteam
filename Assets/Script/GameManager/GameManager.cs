@@ -11,10 +11,10 @@ public class GameManager : MonoBehaviour
         if (instance = null) instance = this;
     }
 
-    void Start()
-    {
+    //void Start()
+    //{
 
-    }
+    //}
 
     void Update()
     {

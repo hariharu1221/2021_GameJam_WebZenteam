@@ -45,11 +45,11 @@ MonoBehaviour:
     - 10
   - name: "\uC989\uACB0 \uCC98\uD615"
     sprite: {fileID: 21300000, guid: c5c882ef843d1dd4dbaa2f982d44b95a, type: 3}
-    percent: 15
+    percent: 100
     skillText: "Hp\uAC00 50\uC774\uD558\uC778 \uC0C1\uB300\uB97C \uC989\uC2DC \uCC98\uD615\uD55C\uB2E4."
     skill: 4
     skillParameter:
-    - 30
+    - 15
   - name: "\uD654\uC5FC\uD0C4"
     sprite: {fileID: 21300000, guid: 4254f06271f9dc64894b829ec0ce1443, type: 3}
     percent: 0

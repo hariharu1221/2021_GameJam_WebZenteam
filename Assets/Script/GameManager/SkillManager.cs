@@ -145,12 +145,12 @@ public class SkillManager : MonoBehaviour
         CameraManager.Instance.ViewEntity(true);
         yield return new WaitForSeconds(0.75f);
 
-        CameraManager.Instance.SetPosWithSize(new Vector3(3f, 2.7f, -100), 3, 0.4f);
-        StartCoroutine(ShowEffect(true, "HeadShotReady", 0.1f, 0.3f, 0.2f));
-        yield return new WaitForSeconds(0.8f);
-
         if (enemy.status.Hp <= hp)
         {
+            CameraManager.Instance.SetPosWithSize(new Vector3(3f, 2.7f, -100), 3, 0.4f);
+            StartCoroutine(ShowEffect(true, "ExReady", 0.1f, 2.4f, 0.2f));
+            yield return new WaitForSeconds(0.8f);
+
             enemy.status.Hp = -999;
 
             CameraManager.Instance.SetPosWithSize(new Vector3(-3f, 2.7f, -100), 3, 0.4f);
@@ -187,6 +187,9 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
+            CameraManager.Instance.SetPosWithSize(new Vector3(3f, 2.7f, -100), 3, 0.4f);
+            StartCoroutine(ShowEffect(true, "ExReady", 0.1f, 0.3f, 0.2f));
+            yield return new WaitForSeconds(0.8f);
             yield return StartCoroutine(EnemyDaggerAttack(1f));
         }
     }
