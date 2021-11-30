@@ -55,7 +55,7 @@ public class SkillManager : MonoBehaviour
 
         CameraManager.Instance.SetPosWithSize(new Vector3(3f, 2.7f, -100), 3, 0.2f);
         yield return new WaitForSeconds(0.1f);
-        StartCoroutine(ShowEffect(true, "Damaged", 0.1f, 0.3f, 0.2f));
+        StartCoroutine(ShowEffect(false, "DamagedByGun", 0.1f, 0.3f, 0.2f));
         SetEntitySprite(enemy.gameObject, enemy.sprites.damaged);
         PlusMoveDotWeen(enemy.gameObject, new Vector3(1.3f, 0, 0), 0.2f);
         enemy.status.Hp -= CheckDamage(percent, player.status.Attack, enemy.status.Defense);
@@ -81,7 +81,7 @@ public class SkillManager : MonoBehaviour
         SetEntitySprite(player.gameObject, player.sprites.swordAttack);
         PlusMoveDotWeen(player.gameObject, new Vector3(0.5f, 0, 0), 0.1f);
         StartCoroutine(ShowEffect(true, "DaggerEffect", 0.2f, 0.3f, 0.2f));
-        if (blood) StartCoroutine(ShowEffect(true, "Damaged", 0.2f, 0.3f, 0.2f));
+        if (blood) StartCoroutine(ShowEffect(false, "Damaged", 0.2f, 0.3f, 0.2f));
         StartCoroutine(ShowEffect(false, "DamagedByDagger", 0.2f, 0.3f, 0.2f));
         SoundManager.Instance.PlaySFXSound("DaggerAttack", 0.6f);
         CameraManager.Instance.SetPosWithSize(new Vector3(3f, 2.6f, -100), 3, 0.2f);
@@ -111,7 +111,7 @@ public class SkillManager : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
 
         CameraManager.Instance.SetPosWithSize(new Vector3(3f, 2.7f, -100), 3, 0.4f);
-        StartCoroutine(ShowEffect(true, "HeadShotReady", 0.1f, 0.3f, 0.2f));
+        StartCoroutine(ShowEffect(true, "HeadShotReady", 0.1f, 2f, 0.3f));
         yield return new WaitForSeconds(0.8f);
 
         CameraManager.Instance.SetPosWithSize(new Vector3(-3f, 2.7f, -100), 3, 0.4f);
