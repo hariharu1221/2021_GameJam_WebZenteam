@@ -90,7 +90,7 @@ public class SkillManager : MonoBehaviour
         SetEntitySprite(enemy.gameObject, enemy.sprites.damaged);
         PlusMoveDotWeen(enemy.gameObject, new Vector3(1.3f, 0, 0), 0.2f);
         enemy.status.Hp -= CheckDamage(percent, player.status.Attack, enemy.status.Defense);
-        if (blood) enemy.status.Hp += CheckDamage(percent, enemy.status.Attack, player.status.Defense);
+        if (blood) player.status.Hp += CheckDamage(percent, player.status.Attack, enemy.status.Defense);
         yield return new WaitForSeconds(0.5f);
 
         yield return StartCoroutine(DashBack(true));
@@ -138,14 +138,14 @@ public class SkillManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
     }
 
-    IEnumerator EX(int hp)
+    IEnumerator EX(float hppercent)
     {
         CameraManager.Instance.SetPosWithSize(new Vector3(-3f, 2.7f, -100), 3, 0.2f);
         SetEntitySprite(player.gameObject, player.sprites.gunReady);
         CameraManager.Instance.ViewEntity(true);
         yield return new WaitForSeconds(0.75f);
 
-        if (enemy.status.Hp <= hp)
+        if (enemy.status.Hp <= enemy.status.MaxHp * (hppercent / 100))
         {
             CameraManager.Instance.SetPosWithSize(new Vector3(3f, 2.7f, -100), 3, 0.4f);
             StartCoroutine(ShowEffect(true, "ExReady", 0.1f, 2.4f, 0.2f));
@@ -272,14 +272,14 @@ public class SkillManager : MonoBehaviour
         yield return StartCoroutine(EnemyDaggerAttack(percent));
     }
 
-    IEnumerator Sacrifice(int defense, int hp, bool isMySkill)
+    IEnumerator Sacrifice(int defense, float percent, bool isMySkill)
     {
         if (isMySkill)
         {
             CameraManager.Instance.SetPosWithSize(new Vector3(-3f, 2.7f, -100), 3, 0.2f);
             yield return new WaitForSeconds(0.2f);
             player.status.Defense -= defense;
-            player.status.Hp += hp;
+            player.status.Hp += (int)(player.status.MaxHp * percent);
             yield return StartCoroutine(ShowEffect(true, "DecreaseDefense", 0.2f, 0.5f, 0.2f));
             yield return StartCoroutine(ShowEffect(true, "Heal", 0.2f, 0.5f, 0.2f));
         }
@@ -288,7 +288,7 @@ public class SkillManager : MonoBehaviour
             CameraManager.Instance.SetPosWithSize(new Vector3(3f, 2.7f, -100), 3, 0.2f);
             yield return new WaitForSeconds(0.2f);
             enemy.status.Defense -= defense;
-            enemy.status.Hp += hp;
+            enemy.status.Hp += (int)(enemy.status.MaxHp * percent);
             yield return StartCoroutine(ShowEffect(false, "DecreaseDefense", 0.2f, 0.5f, 0.2f));
             yield return StartCoroutine(ShowEffect(false, "Heal", 0.2f, 0.5f, 0.2f));
         }
@@ -426,13 +426,13 @@ public class SkillManager : MonoBehaviour
         else if (skill == CardSkill.HeadShot && !isMySkill)
             return EnemyDaggerAttack(2f);
         else if (skill == CardSkill.LittleSacrifice)
-            return Sacrifice(2, 10, isMySkill);
+            return Sacrifice((int)(parameter[0]), parameter[1], isMySkill);
         else if (skill == CardSkill.Bloodlust && isMySkill)
-            return PlayerDaggerAttack(1f, true);
+            return PlayerDaggerAttack(parameter[0], true);
         else if (skill == CardSkill.Bloodlust && !isMySkill)
-            return EnemyDaggerAttack(1f, true);
+            return EnemyDaggerAttack(parameter[0], true);
         else if (skill == CardSkill.BreakTheMold)
-            return BreakTheMold(4, isMySkill);
+            return BreakTheMold((int)(parameter[0]), isMySkill);
         else if (skill == CardSkill.HealthUp)
             return HealthUp((int)(parameter[0]), isMySkill);
         else if (skill == CardSkill.StrengthUp)
@@ -444,7 +444,7 @@ public class SkillManager : MonoBehaviour
         else if (skill == CardSkill.LastStand)
             return LastStand(1.5f, 2.5f, isMySkill);
         else if (skill == CardSkill.TheCollector && isMySkill)
-            return EX(50);
+            return EX(parameter[0]);
 
 
 

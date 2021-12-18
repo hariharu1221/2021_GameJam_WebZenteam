@@ -13,6 +13,9 @@ public class MapManager : MonoBehaviour
     public Sprite past_location;
     public Sprite player_location;
 
+    public GameObject Victory;
+    public GameObject RightButton;
+
     [SerializeField] private Map mapData;
     [SerializeField] private GameObject playerObject;
     [SerializeField] private GameObject enemyTransform;
@@ -24,7 +27,6 @@ public class MapManager : MonoBehaviour
     Node[,] Board;
     [HideInInspector] public int height;
     [HideInInspector] public int width;
-
     [HideInInspector] public bool active = false;
     bool isMove = false;
 
@@ -145,6 +147,7 @@ public class MapManager : MonoBehaviour
 
             SkillManager.Instance.SetEntity(enemy, player);
             StartCoroutine(Delay(0.5f, () => TurnManager.Instance.StartBattle(enemy, player)));
+            RightButton.SetActive(true);
         }
         else
         {
@@ -160,7 +163,9 @@ public class MapManager : MonoBehaviour
         coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, 300), 3f, 0.1f, false));
         active = !active;
         StartCoroutine(UIManager.Instance.FadeInObject(enemyObject.GetComponentsInChildren<SpriteRenderer>(), 1.0f, 0f));
-
+        RightButton.SetActive(false);
+        if (playerPos.x == 7 && playerPos.y == 4) 
+            Victory.SetActive(true);
         isMove = false;
     }
 
@@ -186,12 +191,13 @@ public class MapManager : MonoBehaviour
         {
             StartCoroutine(UIManager.Instance.FadeInObject(UIManager.Instance.Fade, 0.5f, 0f));
             coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, -350), 3f, 0.3f));
-            
+            RightButton.SetActive(true);
         }
         else
         {
             StartCoroutine(UIManager.Instance.FadeOutObject(UIManager.Instance.Fade, 0.5f, 0f));
             coroutine = StartCoroutine(UIManager.Instance.MoveUI(MapBoard.gameObject, new Vector2(0, 350), 3f, 0.1f, false));
+            RightButton.SetActive(false);
         }
 
         active = !active;

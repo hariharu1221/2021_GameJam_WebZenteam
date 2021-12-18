@@ -43,12 +43,15 @@ public class CardManager : MonoBehaviour
                 CardBuffer.Add(card);
         }
 
-        for (int i = 0; i < cardData.cards.Length; i++)
+        for (int k = 0; k < 10; k++)
         {
-            int rand = Random.Range(i, CardBuffer.Count);
-            Card temp = CardBuffer[i];
-            CardBuffer[i] = CardBuffer[rand];
-            CardBuffer[rand] = temp;
+            for (int i = 0; i < CardBuffer.Count; i++)
+            {
+                int rand = Random.Range(i, CardBuffer.Count);
+                Card temp = CardBuffer[i];
+                CardBuffer[i] = CardBuffer[rand];
+                CardBuffer[rand] = temp;
+            }
         }
     }
 

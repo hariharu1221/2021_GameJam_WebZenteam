@@ -1316,7 +1316,7 @@ MonoBehaviour:
     maxhp: 140
     hp: 140
     speed: 5
-    attack: 29
+    attack: 24
     defense: 15
 --- !u!1 &8664587061434110954
 GameObject:

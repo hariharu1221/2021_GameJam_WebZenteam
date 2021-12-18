@@ -16,7 +16,7 @@ public class TurnManager : MonoBehaviour
     public bool myTurn;
     public bool isBattle;
     public bool isTurnLoad = false;
-    private Player player;
+    [SerializeField] private Player player;
     private Enemy enemy;
     [SerializeField] private GameObject GameBoard;
     private GameObject[] BoardCardArray;
@@ -45,16 +45,12 @@ public class TurnManager : MonoBehaviour
         TurnEndOb.GetComponent<Button>().onClick.AddListener(() => TurnEnd());
         playerStatus = GameObject.Find("player_indicator");
         enemyStatus = GameObject.Find("enemy_indicator");
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     void Start()
     {
         for (int i = 0; i < 5; i++) StartCoroutine(DropCard(1f + i * 0.2f));
-    }
-
-    void reSet()
-    {
-        
     }
 
     public void StartBattle(Enemy enemy, Player player)
@@ -93,8 +89,20 @@ public class TurnManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("Title");
+            Lose.SetActive(true);
+            Invoke("GoTitle", 5f);
         }
+    }
+
+    void GoTitle()
+    {
+        SceneManager.LoadScene("Title");
+    }
+
+    IEnumerator Delay(float time, UnityEngine.Events.UnityAction act)
+    {
+        yield return new WaitForSeconds(time);
+        act();
     }
 
     public void IfEndBattle()
