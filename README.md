@@ -1,2 +1,2 @@
-# 2020_GameJam_WebZenteam
-2020 게임잼
+# 2021_GameJam_WebZenteam
+2021 게임잼
