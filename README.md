@@ -1,6 +1,7 @@
 # 2021_GameJam_WebZenteam
 
 ## **2021 교내게임잼 장려상 수상**
+## [유튜브 링크](https://youtu.be/jfV7PCQtvmk)
 
 ##### 개발시간 3일
 
